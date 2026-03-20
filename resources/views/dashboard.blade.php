@@ -435,18 +435,17 @@
             font-size: 20px;
             font-weight: 700;
             color: #5D393B;
-            margin-left: 47.7px;
+            margin-bottom: 15px;
         }
 
         /* Box utama daur ulang: grid 2 kolom (kiri:kanan = 1:2) */
         .daur-box {
             background: white;
             border-radius: 18px;
-            margin-left: 47.7px;
             margin-bottom: 90px;
             border: 1px solid #F0D5D8;
             overflow: hidden;
-            width: 93.7%;
+            width: 100%;
             display: grid;
             grid-template-columns: 1fr 2fr; /* kiri lebih kecil, kanan lebih lebar */
             box-shadow: 0 2px 12px rgba(184,92,101,0.06);
