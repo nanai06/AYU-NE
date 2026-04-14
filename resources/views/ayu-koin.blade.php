@@ -184,8 +184,6 @@
         }
         .riwayat-icon.masuk { background: #e8f5e9; color: #2ecc71; }
         .riwayat-icon.keluar { background: #fce4ec; color: #e07080; }
-        .riwayat-icon.bonus { background: #fff8e1; color: #f9a825; }
-
         .riwayat-info { flex: 1; }
         .riwayat-nama { font-size: 14px; font-weight: 600; color: #5D393B; }
         .riwayat-tgl { font-size: 11px; color: #b4a0a0; margin-top: 3px; }
@@ -607,16 +605,6 @@
                 <div class="riwayat-koin minus">-500 Koin</div>
             </div>
             <div class="riwayat-item">
-                <div class="riwayat-icon bonus">
-                    <iconify-icon icon="ph:star-fill" width="22"></iconify-icon>
-                </div>
-                <div class="riwayat-info">
-                    <div class="riwayat-nama">Bonus misi harian</div>
-                    <div class="riwayat-tgl">1 Maret 2026</div>
-                </div>
-                <div class="riwayat-koin plus">+25 Koin</div>
-            </div>
-            <div class="riwayat-item">
                 <div class="riwayat-icon masuk">
                     <iconify-icon icon="fontisto:recycle" width="22"></iconify-icon>
                 </div>
@@ -640,16 +628,6 @@
                     <div class="riwayat-tgl">5 Maret 2026</div>
                 </div>
                 <div class="riwayat-koin plus">+50 Koin</div>
-            </div>
-            <div class="riwayat-item">
-                <div class="riwayat-icon bonus">
-                    <iconify-icon icon="ph:star-fill" width="22"></iconify-icon>
-                </div>
-                <div class="riwayat-info">
-                    <div class="riwayat-nama">Bonus misi harian</div>
-                    <div class="riwayat-tgl">1 Maret 2026</div>
-                </div>
-                <div class="riwayat-koin plus">+25 Koin</div>
             </div>
             <div class="riwayat-item">
                 <div class="riwayat-icon masuk">

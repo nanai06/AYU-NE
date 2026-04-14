@@ -3,87 +3,87 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\DropBox;
-use App\Models\RecyclingSubmission;
-use Illuminate\Support\Facades\Auth;
 use App\Models\DaurUlang;
+use Illuminate\Support\Facades\Auth;
 
 class RecyclingController extends Controller
 {
-    // Halaman upload foto
-    public function index()
+    public function index(Request $request)
     {
+        if ($request->lokasi) {
+            session(['lokasi_pilih' => $request->lokasi]);
+        }
+
         return view('scan-kemasan');
     }
 
-    // Simpan foto kemasan
     public function uploadFoto(Request $request)
-{
-    $request->validate([
-        'foto_kemasan'   => 'required|array|min:1',
-        'foto_kemasan.*' => 'image|mimes:jpg,jpeg,png|max:5048',
-    ]);
+    {
+        if ($request->lokasi) {
+            session(['lokasi_pilih' => $request->lokasi]);
+        }
 
-    $paths = [];
-    foreach ($request->file('foto_kemasan') as $foto) {
-        $paths[] = $foto->store('kemasan', 'public');
+        $request->validate([
+            'foto_kemasan'   => 'required|array|min:1',
+            'foto_kemasan.*' => 'image|mimes:jpg,jpeg,png|max:5048',
+        ]);
+
+        $paths = [];
+
+        foreach ($request->file('foto_kemasan') as $foto) {
+            $paths[] = $foto->store('kemasan', 'public');
+        }
+
+        // penting: simpan 1 foto pertama aja
+        session(['foto_kemasan' => $paths[0]]);
+
+        return redirect()->route('scan-qr');
     }
 
-    session(['foto_kemasan' => json_encode($paths)]);
-    session()->save(); // ← tetap ada ini
-
-    return redirect()->route('scan-qr');
-}
-    // Halaman scan QR
     public function scanQR()
     {
         return view('scan-qr');
     }
 
-    // Proses QR / kode manual
     public function prosesQR(Request $request)
-{
-    $request->validate([
-        'qr_code' => 'required|string',
-    ]);
+    {
+        $kode = $request->qr_code;
+        $lokasiDipilih = session('lokasi_pilih');
 
-    $dropBox = DropBox::where('qr_code', $request->qr_code)
-                      ->where('aktif', true)
-                      ->first();
+        if ($kode == 'AYUNE-001') {
+            $lokasiQR = 'A';
+        } elseif ($kode == 'AYUNE-002') {
+            $lokasiQR = 'B';
+        } else {
+            return back()->withErrors(['qr_code' => 'QR tidak valid']);
+        }
 
-    if (!$dropBox) {
-        return back()->withErrors(['qr_code' => 'Kode tidak valid atau drop box tidak aktif!']);
+        if (!$lokasiDipilih) {
+            return back()->withErrors(['qr_code' => 'Lokasi belum dipilih']);
+        }
+
+        if ($lokasiDipilih != $lokasiQR) {
+            return back()->withErrors(['qr_code' => 'QR tidak sesuai lokasi']);
+        }
+
+        // 🔥 FIX: simpan 10 biar sinkron
+        DaurUlang::create([
+            'user_id' => Auth::id(),
+            'foto_kemasan' => session('foto_kemasan'),
+            'qr_code' => $kode,
+            'koin' => 10
+        ]);
+
+        return redirect()->route('daur-ulang-sukses', [
+            'lokasi' => $lokasiQR
+        ]);
     }
 
-    $fotoKemasan = session('foto_kemasan');
-
-    $submission = RecyclingSubmission::create([
-        'user_id'        => Auth::id(),
-        'drop_box_id'    => $dropBox->id,
-        'foto_kemasan'   => $fotoKemasan,
-        'status'         => 'confirmed',
-        'koin_diberikan' => 10,
-    ]);
-
-    // Simpan ke tabel daur_ulang untuk riwayat
-    // foto_kemasan disimpen json, ambil foto pertama buat ditampilin di riwayat
-    $fotoArray = json_decode($fotoKemasan, true);
-    DaurUlang::create([
-        'user_id'      => Auth::id(),
-        'foto_kemasan' => $fotoArray[0] ?? '',
-        'qr_code'      => $request->qr_code,
-        'koin'         => 10,
-    ]);
-
-    Auth::user()->increment('ayu_koin', 10);
-
-    session()->forget('foto_kemasan');
-
-    return redirect()->route('daur-ulang-sukses')->with('koin', 10);
-}
-    // Halaman sukses
-    public function sukses()
+    public function sukses(Request $request)
     {
-        return view('daur-ulang-sukses');
+        return view('daur-ulang-sukses', [
+            'lokasi' => $request->lokasi,
+            'koin' => 10
+        ]);
     }
 }

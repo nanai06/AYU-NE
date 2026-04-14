@@ -189,6 +189,7 @@
   .slide-3 .slide-title { color: #1f3e0bff; }
   .slide-3 .slide-sub { color: #2D5016; }
   .slide-3 .btn-slide { background: #2D5016; }
+  .slide-3 .btn-slide:hover { background: #4e7434ff;}
 
   .slide-title em { font-style: italic; color: var(--primary-deeper); }
   .slide-sub { font-size: 15px; color: var(--text-secondary); margin-bottom: 28px; max-width: 380px; line-height: 1.6; }

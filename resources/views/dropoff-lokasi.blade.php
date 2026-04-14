@@ -334,7 +334,7 @@
                 {{-- Jarak: pojok kanan atas --}}
                 <span class="location-distance" style="position:absolute; top:16px; right:16px;">0.5 km</span>
                 {{-- Tombol pilih: redirect ke halaman scan-kemasan --}}
-                <a href="{{ route('scan-kemasan') }}" class="btn-pilih" style="position:absolute; bottom:16px; right:16px; text-decoration:none;">Pilih Lokasi</a>
+                <a href="{{ route('scan-kemasan', ['lokasi' => 'A']) }}" class="btn-pilih" style="position:absolute; bottom:16px; right:16px; text-decoration:none;">Pilih Lokasi</a>
             </div>
 
             {{-- Lokasi 2: Indomaret Thamrin --}}
@@ -348,7 +348,7 @@
                     <div class="location-address">Jl. M.H. Thamrin No. 12, Jakarta Pusat</div>
                 </div>
                 <span class="location-distance" style="position:absolute; top:16px; right:16px;">1.2 km</span>
-                <a href="{{ route('scan-kemasan') }}" class="btn-pilih" style="position:absolute; bottom:16px; right:16px; text-decoration:none;">Pilih Lokasi</a>
+                <a href="{{ route('scan-kemasan', ['lokasi' => 'B']) }}" class="btn-pilih" style="position:absolute; bottom:16px; right:16px; text-decoration:none;">Pilih Lokasi</a>
             </div>
 
             {{-- Lokasi 3: Guardian Grand Indonesia --}}
